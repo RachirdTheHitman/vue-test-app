@@ -1,30 +1,39 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
+  <navbar />
+  <div class="container">
+    <router-view />
   </div>
-  <router-view/>
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
+import Navbar from "./components/Navbar.vue";
+import { onBeforeMount } from "vue";
+import firebase from "firebase";
+import { useRoute, useRouter } from "vue-router";
 
-#nav {
-  padding: 30px;
-}
+export default {
+  components: {
+    Navbar,
+  },
+  setup() {
+    const router = useRouter();
+    const route = useRoute();
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
+    onBeforeMount(() => {
+      firebase.auth().onAuthStateChanged((user) => {
+        if (!user) {
+          router.replace("/login");
+        } else if (route.path == "/login" || route.path == "/register") {
+          router.replace("/");
+        }
+      });
+    });
+  },
+};
+</script>
+ 
+ <style scoped>
+.container {
+  max-width: 500px;
 }
 </style>
