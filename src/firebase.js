@@ -1,6 +1,6 @@
-import firebase from "firebase";
 import { ref, onUnmounted } from "vue";
 import { firebaseApp } from "./main";
+import firebase from 'firebase';
 
 const db = firebaseApp.firestore();
 const usersCollection = db.collection("users");
@@ -27,7 +27,10 @@ export const signup = (email, password) => {
 };
 
 export const login = (user) => {
-  return firebase.auth().signInWithEmailAndPassword(user.email, user.password).catch(err=>window.alert(err.message));
+  return firebase
+    .auth()
+    .signInWithEmailAndPassword(user.email, user.password)
+    .catch((err) => window.alert(err.message));
 };
 
 export const logout = () => {

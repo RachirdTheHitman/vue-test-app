@@ -35,7 +35,7 @@
 
 <script>
 import { reactive } from "vue";
-import { login } from "@/firebase";
+import { login } from "../firebase";
 import { useRouter } from "vue-router";
 
 export default {

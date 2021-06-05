@@ -1,7 +1,7 @@
 module.exports = {
   root: true,
   env: {
-    es6: true,
+    es2020: true,
     node: true,
   },
   extends: [
@@ -12,5 +12,6 @@ module.exports = {
     "quotes": ["error", "double"],
     "object-curly-spacing": ["warn", "always"],
     "indent": ["warn", 2],
+    "sourceType": "module",
   },
 };
