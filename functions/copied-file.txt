@@ -47,3 +47,20 @@ app.get("/users", async (req, res) => {
 });
 
 export const widgets = https.onRequest(app);
+module.exports = {
+  root: true,
+  env: {
+    es2020: true,
+    node: true,
+  },
+  extends: [
+    "eslint:recommended",
+    "google",
+  ],
+  rules: {
+    "quotes": ["error", "double"],
+    "object-curly-spacing": ["warn", "always"],
+    "indent": ["warn", 2],
+    "sourceType": "module",
+  },
+};

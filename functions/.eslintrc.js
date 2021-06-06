@@ -1,17 +1,33 @@
 module.exports = {
   root: true,
   env: {
-    es2020: true,
+    es6: true,
     node: true,
   },
   extends: [
     "eslint:recommended",
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "plugin:import/typescript",
     "google",
+    "plugin:@typescript-eslint/recommended",
   ],
+  parser: "@typescript-eslint/parser",
+  parserOptions: {
+    project: ["tsconfig.json", "tsconfig.dev.json"],
+    sourceType: "module",
+    tsconfigRootDir: __dirname,
+    createDefaultProgram: true
+  },
+  ignorePatterns: [
+    "/lib/**/*", // Ignore built files.
+  ],
+  plugins: ["@typescript-eslint", "import"],
   rules: {
     "quotes": ["error", "double"],
     "object-curly-spacing": ["warn", "always"],
     "indent": ["warn", 2],
-    "sourceType": "module",
+    "comma-dangle": ["warn", "never"],
+    "new-cap": ["error", { capIsNewExceptionPattern: "^Express.." }],
   },
 };
