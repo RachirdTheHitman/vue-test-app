@@ -1,6 +1,6 @@
 import { ref, onUnmounted } from "vue";
 import { firebaseApp } from "./main";
-import firebase from 'firebase';
+import firebase from "firebase";
 
 const db = firebaseApp.firestore();
 const usersCollection = db.collection("users");
@@ -14,8 +14,13 @@ export const getUser = async (id) => {
   return user.exists ? user.data() : null;
 };
 
-export const updateUser = (id, user) => {
-  return usersCollection.doc(id).update(user);
+export const getUserByEmail = async (email) => {
+  const user = await usersCollection.where("email", "==", email).get();
+  return user;
+};
+
+export const updateUser = (id, data) => {
+  return usersCollection.doc(id).update(data);
 };
 
 export const deleteUser = (id) => {
@@ -40,8 +45,12 @@ export const logout = () => {
 export const verifyUser = () => {
   var user = firebase.auth().currentUser;
 
+  const actionCodeSettings = {
+    url: "https://vue-test-app-ef47d.web.app/",
+  };
+
   user
-    .sendEmailVerification()
+    .sendEmailVerification(actionCodeSettings)
     .then(function() {
       window.alert("Verification Email Sent");
     })

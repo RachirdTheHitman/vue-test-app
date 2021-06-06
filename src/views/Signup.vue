@@ -58,10 +58,12 @@
 </template>
 
 <script>
-import firebase from "firebase";
+import axios from "axios";
 import { reactive } from "vue";
 import { useRouter } from "vue-router";
-import { signup } from "../firebase";
+import { API_BASE_URL } from "../config";
+import firebase from "firebase";
+import { getUserByEmail } from "../firebase";
 
 export default {
   name: "Signup",
@@ -76,15 +78,30 @@ export default {
     });
 
     const onSubmit = async () => {
-      signup(form.email, form.password);
-      const addUser = firebase.functions().httpsCallable("widgets");
-      addUser(form);
+      // const addUser = firebase.functions().httpsCallable("widgets");
+      const { email, password, country, timezone } = form;
+
+      const userExisted = await getUserByEmail(email);
+
+      // user already exsited
+      if (!userExisted.empty) {
+        window.alert("user already exsits!");
+      } else {
+        await firebase.auth().createUserWithEmailAndPassword(email, password);
+      }
+
+      await axios.post(API_BASE_URL + "/users", {
+        email,
+        password,
+        country,
+        timezone,
+      });
       form.email = "";
       form.password = "";
-      form.country= "";
+      form.country = "";
       form.timezone = "";
 
-      router.replace('/login')
+      router.replace("/");
     };
 
     return { form, onSubmit };

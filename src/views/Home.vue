@@ -1,7 +1,10 @@
 <template>
   <div class="home">
     <div v-if="!userVerified">
-      <div>You need to verify your acount first in your email inbox!</div>
+      <div>
+        Email verificatino has been sent, please verify your acount first in
+        your email inbox!
+      </div>
       <br />
       <button class="btn btn-success" @click="verifyUser">
         Verify me again!
@@ -18,14 +21,15 @@
 <script>
 import { onBeforeMount, ref } from "vue";
 import firebase from "firebase";
-import { logout, verifyUser } from "../firebase";
+import { logout, updateUser, verifyUser } from "../firebase";
 
 export default {
   setup() {
     const name = ref("");
-    const userVerified = ref(false);
+    const userVerified = ref(firebase.auth().currentUser.emailVerified);
 
     onBeforeMount(() => {
+      // user exsits and email is not verified yet
       const user = firebase.auth().currentUser;
       if (user) {
         const timer = setInterval(async () => {
@@ -33,6 +37,11 @@ export default {
           const userNew = firebase.auth().currentUser;
           if (userNew.emailVerified) {
             clearInterval(timer);
+            // update vefieid field to true
+            console.log("usernew uid", userNew.uid);
+            updateUser(userNew.uid, { verified: true }).then(() =>
+              window.alert("firestore updated!")
+            );
             userVerified.value = true;
           }
         }, 5000);

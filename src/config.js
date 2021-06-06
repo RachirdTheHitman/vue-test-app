@@ -1,0 +1,1 @@
+export const API_BASE_URL = "https://us-central1-vue-test-app-ef47d.cloudfunctions.net/widgets"
